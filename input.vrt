@@ -1,0 +1,10 @@
+decimalLatitude,decimalLongitude
+
+<OGRVRTDataSource>
+    <OGRVRTLayer name="test">
+        <SrcDataSource>in.csv</SrcDataSource>
+        <GeometryType>wkbPoint</GeometryType>
+        <LayerSRS>WGS84</LayerSRS>
+        <GeometryField encoding="PointFromColumns" x="decimalLongitude" y="decimalLatitude"/>
+    </OGRVRTLayer>
+</OGRVRTDataSource> 

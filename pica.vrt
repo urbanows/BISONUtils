@@ -1,0 +1,13 @@
+<OGRVRTDataSource>
+  <OGRVRTLayer name="bison">
+    <!--
+    <SrcDataSource relativeToVRT="1">.</SrcDataSource>
+    ogr2ogr -overwrite -f "ESRI Shapefile" ./ csvToShp.vrt
+    -->
+    <SrcDataSource>downloadData/bison-Pica_nuttalli-Colorado.csv</SrcDataSource>
+    <SrcLayer>bison-Pica_nuttalli-Colorado</SrcLayer>
+    <GeometryType>wkbPoint</GeometryType>
+    <LayerSRS>WGS84</LayerSRS>
+    <GeometryField encoding="PointFromColumns" x="lon" y="lat"/>
+  </OGRVRTLayer>
+</OGRVRTDataSource>
