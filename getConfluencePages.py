@@ -21,8 +21,8 @@ def download(url,filename):
     if response.status_code == 200:
         if response.headers.get('Content-Disposition'):
             print(response.headers.get('Content-Length'))
+            #check content-length != 118 (empty zip)
             if response.headers.get('Content-Length') != '118':
-              #TODO check content-length != 118 (empty zip)
               open(filename, 'wb').write(response.content)
             else:
               print('Empty zifile encountered: '+filename)
@@ -76,4 +76,7 @@ def processPage(pageid,pageName):
       processPage(item["id"], item["title"])
     #https://my.usgs.gov/confluence/rest/api/content/489357375/child/page
 
-processPage(pageid,"NEED TO LOOKUP TITLE")
+initPageUrl='https://my.usgs.gov/confluence/rest/api/content/'+pageid
+response = requests.get(initPageUrl, auth=(user, passwd))
+jsonResp=response.json()
+processPage(pageid,"".join([x if x.isalnum() else "_" for x in jsonResp["title"]]))
