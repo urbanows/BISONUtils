@@ -25,7 +25,7 @@ def download(url,filename):
             if response.headers.get('Content-Length') != '118':
               open(filename, 'wb').write(response.content)
             else:
-              print('Empty zifile encountered: '+filename)
+              print('Empty zipfile encountered: '+filename)
 
 def buildPath(pageid):
     fullPath="./"
