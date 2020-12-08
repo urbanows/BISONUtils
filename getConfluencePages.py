@@ -9,6 +9,14 @@ import requests
 import errno
 import json
 import zipfile
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+session = requests.Session()
+retry = Retry(connect=10, backoff_factor=1)
+adapter = HTTPAdapter(max_retries=retry)
+session.mount('http://', adapter)
+session.mount('https://', adapter)
 
 pageid=sys.argv[1]
 
@@ -17,7 +25,7 @@ user=input('AD Username: ')
 passwd = getpass.getpass(prompt='Password: ')
 
 def download(url,filename):
-    response = requests.get(url, auth=(user, passwd), timeout=600, stream=True)
+    response = session.get(url, auth=(user, passwd), stream=True)
     if response.status_code == 200:
         if response.headers.get('Content-Disposition'):
             print(response.headers.get('Content-Length'))
@@ -31,7 +39,7 @@ def buildPath(pageid):
     fullPath="./"
     #https://my.usgs.gov/confluence/rest/api/content/544051479?expand=ancestors
     ancestorUrl='https://my.usgs.gov/confluence/rest/api/content/'+pageid+'?expand=ancestors'
-    response = requests.get(ancestorUrl, auth=(user, passwd))
+    response = session.get(ancestorUrl, auth=(user, passwd))
     jsonResp=response.json()
     for item in jsonResp["ancestors"]:
       #use OS path seperastors
@@ -68,7 +76,7 @@ def processPage(pageid,pageName):
 
     #This will return all children, need to call recursivly:
     childrenUrl='https://my.usgs.gov/confluence/rest/api/content/search?cql=parent='+pageid
-    response = requests.get(childrenUrl, auth=(user, passwd))
+    response = session.get(childrenUrl, auth=(user, passwd))
     jsonResp=response.json()
     for item in jsonResp["results"]:
       print(item["id"])
