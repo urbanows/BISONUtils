@@ -36,14 +36,15 @@ def download(url,filename):
               print('Empty zipfile encountered: '+filename)
 
 def buildPath(pageid):
-    fullPath="./"
+    #fullPath="./"
+    fullPath=""
     #https://my.usgs.gov/confluence/rest/api/content/544051479?expand=ancestors
     ancestorUrl='https://my.usgs.gov/confluence/rest/api/content/'+pageid+'?expand=ancestors'
     response = session.get(ancestorUrl, auth=(user, passwd))
     jsonResp=response.json()
     for item in jsonResp["ancestors"]:
       #use OS path seperastors
-      fullPath+="".join([x if x.isalnum() else "_" for x in item["title"]])+"/"
+      fullPath+="".join([x if x.isalnum() else "_" for x in item["title"]])+os.path.sep
     print(fullPath)
     return fullPath
 
